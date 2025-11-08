@@ -9,3 +9,10 @@ rust-version = "1.88"
 anyhow = "1.0"                                # error handling
 bytes = "1.3"                                 # helps manage buffers
 thiserror = "2.0"                             # error handling
+
+[lints.clippy]
+pedantic = "warn"
+nursery = "warn"
+
+[lints.rust]
+unsafe_code = "forbid"
