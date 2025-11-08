@@ -1,6 +1,9 @@
-use std::io::{self, Write};
+use std::{
+    fmt::Display,
+    io::{self, Write},
+};
 
-const BUILTINS: [&str; 1] = ["exit"];
+const BUILTINS: [&str; 2] = ["exit", "echo"];
 
 fn main() {
     loop {
@@ -23,6 +26,8 @@ fn main() {
                             .map_or(0, |token| token.parse::<i32>().unwrap_or_default());
 
                         exit(status);
+                    } else if command == "echo" {
+                        echo(tokens);
                     }
                 } else {
                     println!("{line}: command not found");
@@ -36,4 +41,22 @@ fn main() {
 // TODO: Move to builtin module
 fn exit(status: i32) {
     std::process::exit(status);
+}
+
+fn echo<T>(iterator: T)
+where
+    T: Iterator,
+    <T as Iterator>::Item: Display,
+{
+    let mut peekable = iterator.peekable();
+
+    while let Some(word) = peekable.next() {
+        print!("{word}");
+
+        if peekable.peek().is_some() {
+            print!(" ");
+        }
+    }
+
+    println!();
 }
