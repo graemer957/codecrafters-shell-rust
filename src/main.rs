@@ -3,7 +3,7 @@ use std::{
     io::{self, Write},
 };
 
-const BUILTINS: [&str; 2] = ["exit", "echo"];
+const BUILTINS: [&str; 3] = ["exit", "echo", "type"];
 
 fn main() {
     loop {
@@ -20,14 +20,30 @@ fn main() {
                 };
 
                 if BUILTINS.contains(&command) {
-                    if command == "exit" {
-                        let status = tokens
-                            .next()
-                            .map_or(0, |token| token.parse::<i32>().unwrap_or_default());
+                    match command {
+                        "exit" => {
+                            let status = tokens
+                                .next()
+                                .map_or(0, |token| token.parse::<i32>().unwrap_or_default());
 
-                        exit(status);
-                    } else if command == "echo" {
-                        echo(tokens);
+                            exit(status);
+                        }
+                        "echo" => {
+                            echo(tokens);
+                        }
+                        "type" => {
+                            let Some(command) = tokens.next() else {
+                                continue;
+                            };
+
+                            if BUILTINS.contains(&command) {
+                                println!("{command} is a shell builtin");
+                            } else {
+                                println!("{command}: not found");
+                            }
+                        }
+                        // TODO: Parse command into own type?
+                        _ => unreachable!("builtin is not being properly handled"),
                     }
                 } else {
                     println!("{line}: command not found");
