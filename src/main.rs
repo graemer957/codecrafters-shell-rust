@@ -1,6 +1,11 @@
+use anyhow::{anyhow, Context, Result};
 use std::{
+    env,
     fmt::Display,
+    fs,
     io::{self, Write},
+    os::unix::fs::PermissionsExt,
+    path::PathBuf,
 };
 
 const BUILTINS: [&str; 3] = ["exit", "echo", "type"];
@@ -39,7 +44,10 @@ fn main() {
                             if BUILTINS.contains(&command) {
                                 println!("{command} is a shell builtin");
                             } else {
-                                println!("{command}: not found");
+                                match find_executable(command) {
+                                    Ok(path) => println!("{command} is {}", path.display()),
+                                    Err(_) => println!("{command}: not found"),
+                                }
                             }
                         }
                         // TODO: Parse command into own type?
@@ -75,4 +83,22 @@ where
     }
 
     println!();
+}
+
+// TODO: Move to utility module
+fn find_executable(name: &str) -> Result<PathBuf> {
+    const EXECUTE_BIT: u32 = 0o111;
+
+    let path_env = env::var_os("PATH").context("PATH environment variable not set")?;
+    for mut path in env::split_paths(&path_env) {
+        path.push(name);
+        let Ok(metadata) = fs::metadata(&path) else {
+            continue;
+        };
+        if metadata.is_file() && metadata.permissions().mode() & EXECUTE_BIT != 0 {
+            return Ok(path);
+        }
+    }
+
+    Err(anyhow!("{name}: executable not found in PATH"))
 }

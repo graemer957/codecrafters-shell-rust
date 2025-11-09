@@ -52,3 +52,7 @@ for right now:
 - [ ] CI pipeline on GitHub Actions
 - [ ] 'Really good' error messages, like the Rust compiler (I think
   the crate is called `eyre`)
+- [ ] No attempt has been made to make this shell work on anything other than Linux
+  - See [quispejo's
+    solution](https://github.com/cc-code-examples/curious-gorilla-226481/blob/main/src/main.rs)
+    for example of finding an executable on Windows
