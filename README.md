@@ -33,3 +33,22 @@ Note: This section is for stages 2 and beyond.
    the first time you run it. Subsequent runs will be fast.
 1. Commit your changes and run `git push origin master` to submit your solution
    to CodeCrafters. Test output will be streamed to your terminal.
+
+# TODOs
+
+This is a collection of TODOs of possible improvements/refactors that I feel
+would make this project more elegant / reusable / etc, but do not have the time
+for right now:
+
+- [ ] Get rid of the `unwrap()` in `main` put there by CodeCrafters template
+  - Return type on `main`?
+  - Possible related point below about nice error messages
+- [ ] Handle Ctrl+D to exit the shell
+- [ ] Move code into module(s)
+- [ ] Parse input into a `Command`
+- [ ] Split logic into parsing and executing
+- [ ] Add unit and/or integration tests
+- [ ] Readd "cargo" lints and fix all concerns
+- [ ] CI pipeline on GitHub Actions
+- [ ] 'Really good' error messages, like the Rust compiler (I think
+  the crate is called `eyre`)
