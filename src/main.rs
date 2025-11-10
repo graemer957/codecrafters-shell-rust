@@ -1,11 +1,13 @@
 use anyhow::{anyhow, Context, Result};
 use std::{
     env,
+    ffi::OsStr,
     fmt::Display,
     fs,
     io::{self, Write},
     os::unix::fs::PermissionsExt,
-    path::PathBuf,
+    path::{Path, PathBuf},
+    process,
 };
 
 const BUILTINS: [&str; 3] = ["exit", "echo", "type"];
@@ -55,7 +57,10 @@ fn main() {
                         _ => unreachable!("builtin is not being properly handled"),
                     }
                 } else {
-                    println!("{line}: command not found");
+                    match find_executable(command) {
+                        Ok(path) => execute(&path, tokens),
+                        Err(_) => println!("{command}: not found"),
+                    }
                 }
             }
             Err(error) => eprintln!("error: {error}"),
@@ -103,4 +108,23 @@ fn find_executable(name: &str) -> Result<PathBuf> {
     }
 
     Err(anyhow!("{name}: executable not found in PATH"))
+}
+
+// TODO: Move to utility module
+fn execute<T>(program: &Path, args: T)
+where
+    T: Iterator,
+    T::Item: AsRef<OsStr>,
+{
+    // Originally I was using `program`, a fully qualified path to the executable, for
+    // `Command::new`, but it seems that CodeCrafters requires arg0 to be the program name. I am
+    // not sure what is technically correct for a shell
+    let program_name = program
+        .file_name()
+        .expect("path should be to an executable");
+
+    // TODO: `ExitStatus` is ignored, but we could set `$?` in the future
+    if let Err(err) = process::Command::new(program_name).args(args).status() {
+        eprintln!("{err}");
+    }
 }
