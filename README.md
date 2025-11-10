@@ -40,18 +40,18 @@ This is a collection of TODOs of possible improvements/refactors that I feel
 would make this project more elegant / reusable / etc, but do not have the time
 for right now:
 
-- [ ] Get rid of the `unwrap()` in `main` put there by CodeCrafters template
-  - Return type on `main`?
-  - Possible related point below about nice error messages
-- [ ] Move code into module(s)
-- [ ] Parse input into a `Command`
-- [ ] Split logic into parsing and executing
 - [ ] Add unit and/or integration tests
-- [ ] Readd "cargo" lints and fix all concerns
+- [ ] Re-add "cargo" lints and fix all concerns
 - [ ] CI pipeline on GitHub Actions
+- [ ] Eliminate builtin list duplication between `Command::is_builtin` and
+  parser match
+- [ ] Track exit status (`$?`) for last executed command
 - [ ] 'Really good' error messages, like the Rust compiler (I think
   the crate is called `eyre`)
+  - **NOTE**: This may not be possible / easy because CodeCrafters expects
+    output in a certain way
 - [ ] No attempt has been made to make this shell work on anything other than Linux
   - See [quispejo's
     solution](https://github.com/cc-code-examples/curious-gorilla-226481/blob/main/src/main.rs)
     for example of finding an executable on Windows
+- [ ] Investigate optimisation of zero-copy command parsing with lifetimes
