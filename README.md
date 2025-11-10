@@ -43,7 +43,6 @@ for right now:
 - [ ] Get rid of the `unwrap()` in `main` put there by CodeCrafters template
   - Return type on `main`?
   - Possible related point below about nice error messages
-- [ ] Handle Ctrl+D to exit the shell
 - [ ] Move code into module(s)
 - [ ] Parse input into a `Command`
 - [ ] Split logic into parsing and executing

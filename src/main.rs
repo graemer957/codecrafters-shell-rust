@@ -17,6 +17,7 @@ fn main() {
 
         let mut input = String::new();
         match io::stdin().read_line(&mut input) {
+            Ok(0) => break,
             Ok(_) => {
                 let line = input.trim();
                 let mut tokens = line.split_whitespace();
@@ -63,14 +64,15 @@ fn main() {
 }
 
 // TODO: Move to builtin module
-fn exit(status: i32) {
+fn exit(status: i32) -> ! {
     std::process::exit(status);
 }
 
+// TODO: Move to builtin module
 fn echo<T>(iterator: T)
 where
     T: Iterator,
-    <T as Iterator>::Item: Display,
+    T::Item: Display,
 {
     let mut peekable = iterator.peekable();
 
