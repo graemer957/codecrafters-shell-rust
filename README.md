@@ -43,8 +43,6 @@ for right now:
 - [ ] Add unit and/or integration tests
 - [ ] Re-add "cargo" lints and fix all concerns
 - [ ] CI pipeline on GitHub Actions
-- [ ] Eliminate builtin list duplication between `Command::is_builtin` and
-  parser match
 - [ ] Track exit status (`$?`) for last executed command
 - [ ] 'Really good' error messages, like the Rust compiler (I think
   the crate is called `eyre`)

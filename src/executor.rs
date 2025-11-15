@@ -1,4 +1,8 @@
-use crate::{builtins, command::Command, utils};
+use crate::{
+    builtins::{self, Builtin},
+    command::Command,
+    utils,
+};
 use anyhow::Result;
 use std::{io::Write, path::PathBuf};
 
@@ -19,7 +23,7 @@ where
         Command::Exit { status_code } => builtins::exit(status_code),
         Command::Echo { args } => builtins::echo(&mut stdout, args.iter())?,
         Command::Type { target } => {
-            if Command::is_builtin(&target) {
+            if target.parse::<Builtin>().is_ok() {
                 writeln!(stdout, "{target} is a shell builtin")?;
             } else {
                 find_executable_and(&mut stderr, &target, |_, path| {

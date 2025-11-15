@@ -1,5 +1,24 @@
 use anyhow::Result;
-use std::{fmt::Display, io::Write};
+use std::{fmt::Display, io::Write, str::FromStr};
+
+pub enum Builtin {
+    Echo,
+    Exit,
+    Type,
+}
+
+impl FromStr for Builtin {
+    type Err = ();
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
+            "echo" => Ok(Self::Echo),
+            "exit" => Ok(Self::Exit),
+            "type" => Ok(Self::Type),
+            _ => Err(()),
+        }
+    }
+}
 
 pub fn exit(status: i32) -> ! {
     std::process::exit(status);

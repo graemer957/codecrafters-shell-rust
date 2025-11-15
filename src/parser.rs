@@ -1,4 +1,4 @@
-use crate::command::Command;
+use crate::{builtins::Builtin, command::Command};
 use anyhow::{anyhow, Result};
 use std::io::{BufRead, Write};
 
@@ -27,8 +27,8 @@ impl Parser {
                     return Ok(Command::Noop);
                 };
 
-                match command {
-                    "exit" => {
+                match command.parse::<Builtin>() {
+                    Ok(Builtin::Exit) => {
                         let status = tokens
                             .next()
                             .map_or(0, |token| token.parse::<i32>().unwrap_or_default());
@@ -37,10 +37,10 @@ impl Parser {
                             status_code: status,
                         })
                     }
-                    "echo" => Ok(Command::Echo {
+                    Ok(Builtin::Echo) => Ok(Command::Echo {
                         args: tokens.map(std::string::ToString::to_string).collect(),
                     }),
-                    "type" => {
+                    Ok(Builtin::Type) => {
                         let Some(command) = tokens.next() else {
                             writeln!(stderr, "no parameter passed for `type`")?;
                             return Ok(Command::Noop);
