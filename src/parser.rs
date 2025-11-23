@@ -19,7 +19,7 @@ impl Parser {
     {
         let mut input = String::new();
         match stdin.read_line(&mut input) {
-            Ok(0) => Ok(Command::Exit { status_code: 0 }),
+            Ok(0) => Ok(Command::Exit { code: 0 }),
             Ok(_) => {
                 let line = input.trim();
                 let mut tokens = line.split_whitespace();
@@ -29,16 +29,14 @@ impl Parser {
 
                 match command.parse::<Builtin>() {
                     Ok(Builtin::Exit) => {
-                        let status = tokens
+                        let code = tokens
                             .next()
                             .map_or(0, |token| token.parse::<i32>().unwrap_or_default());
 
-                        Ok(Command::Exit {
-                            status_code: status,
-                        })
+                        Ok(Command::Exit { code })
                     }
                     Ok(Builtin::Echo) => Ok(Command::Echo {
-                        args: tokens.map(std::string::ToString::to_string).collect(),
+                        args: tokens.map(ToString::to_string).collect(),
                     }),
                     Ok(Builtin::Type) => {
                         let Some(command) = tokens.next() else {
@@ -52,7 +50,7 @@ impl Parser {
                     }
                     _ => Ok(Command::External {
                         program: command.to_string(),
-                        args: tokens.map(std::string::ToString::to_string).collect(),
+                        args: tokens.map(ToString::to_string).collect(),
                     }),
                 }
             }

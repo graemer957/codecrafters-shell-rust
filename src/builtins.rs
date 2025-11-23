@@ -20,10 +20,6 @@ impl FromStr for Builtin {
     }
 }
 
-pub fn exit(status: i32) -> ! {
-    std::process::exit(status);
-}
-
 pub fn echo<W, T>(mut writer: W, iterator: T) -> Result<()>
 where
     W: Write,

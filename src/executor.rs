@@ -20,7 +20,6 @@ where
     E: Write,
 {
     match command {
-        Command::Exit { status_code } => builtins::exit(status_code),
         Command::Echo { args } => builtins::echo(&mut stdout, args.iter())?,
         Command::Type { target } => {
             if target.parse::<Builtin>().is_ok() {
@@ -40,7 +39,8 @@ where
                 Ok(())
             })?;
         }
-        Command::Noop => {}
+        // Exiting is handled by `run_repl` and `Noop` by definition needs no action
+        Command::Exit { code: _ } | Command::Noop => {}
     }
 
     Ok(())
