@@ -1,5 +1,5 @@
 use crate::{builtins::Builtin, command::Command};
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use std::io::{BufRead, Write};
 
 pub struct Parser;
