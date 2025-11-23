@@ -33,14 +33,16 @@ Test output will be streamed to the terminal after pushing.
 
 ## Project Structure
 
-- **src/main.rs**: Entry point - orchestrates the REPL loop (prompt → parse → execute)
+- **src/lib.rs**: Library entry point exposing the shell's public API and REPL implementation
+- **src/main.rs**: Binary entry point - thin wrapper that calls the library
 - **src/prompt.rs**: Displays the shell prompt and flushes stdout
 - **src/parser.rs**: Parses input strings into structured `Command` types
 - **src/command.rs**: Core data model representing parsed commands (Exit, Echo, Type, External)
 - **src/executor.rs**: Executes `Command` objects by delegating to builtins or external programs
-- **src/builtins.rs**: Implementations of shell builtin commands (exit, echo)
+- **src/builtins.rs**: Implementations of shell builtin commands (exit, echo, type, pwd, cd)
 - **src/utils.rs**: Utility functions for PATH resolution and program execution
-- **Cargo.toml**: Dependencies include `anyhow` for error handling
+- **tests/**: Integration tests for the shell
+- **Cargo.toml**: Dependencies include `anyhow` for error handling. Configured with `edition = "2024"`, `rust-version = "1.88"`, pedantic/nursery lints, and forbids unsafe code
 - **your_program.sh**: Script for building and running the shell locally. Uses release mode and outputs to `/tmp/codecrafters-build-shell-rust/`
 - **codecrafters.yml**: CodeCrafters configuration. Currently set to `rust-1.88` buildpack with debug logs disabled
 
@@ -61,9 +63,12 @@ Key areas to implement:
 
 ## Development Requirements
 
-- Rust version: 1.80+ (CodeCrafters uses 1.88)
+- Rust edition: 2024
+- MSRV: 1.88
 - The build uses `--release` mode by default for performance
 - Build artifacts are placed in `/tmp/codecrafters-build-shell-rust/` to keep the project directory clean
+- Unsafe code is forbidden
+- Clippy pedantic and nursery lints are enabled
 
 ## Architecture Decisions
 
@@ -84,30 +89,7 @@ Key areas to implement:
 - Private modules: `builtins`, `utils` (implementation details)
 - This separation allows for future extensibility and testing
 
-## Code Review Standards
-
-When reviewing Rust code, always check for:
-
-**Idiomatic Rust:**
-- Use of proper type annotations (e.g., `-> !` for functions that never return)
-- Concise generic bounds (prefer `T::Item` over `<T as Trait>::Item`)
-- Appropriate use of `const` (inside functions when scoped appropriately)
-- Error handling patterns (prefer `anyhow::Context` and `anyhow!` macro over manual error conversion)
-- Unused imports or dead code
-
-**Error Handling:**
-- Avoid `unwrap()` where possible - suggest proper error handling
-- Check for discarded important values (e.g., `Ok(_)` when the value matters)
-- Ensure `Result` and `Option` are handled appropriately
-
-**Performance & Correctness:**
-- Constants defined outside loops/iterations
-- Proper use of iterators (avoiding unnecessary allocations)
-- Correct logic in conditionals (especially bitwise operations)
-
-**Initial Review Completeness:**
-- When asked to review code, provide a comprehensive review covering ALL of the above points in the first pass, not just the most obvious issues. Don't wait for follow-up reviews to mention idiomatic improvements.
-- Be pedantic
+## Project-Specific Review Notes
 
 **When Suggesting Refactorings:**
 - Start with the **simplest, most direct solution** that addresses the user's stated goals
