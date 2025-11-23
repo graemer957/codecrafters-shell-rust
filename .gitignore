@@ -11,3 +11,6 @@ target/
 
 # Claude Code local settings
 .claude/
+
+# Tarpaulin's code coverage report
+tarpaulin-report.html
