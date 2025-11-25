@@ -40,7 +40,6 @@ This is a collection of TODOs of possible improvements/refactors that I feel
 would make this project more elegant / reusable / etc, but do not have the time
 for right now:
 
-- [ ] Add unit and/or integration tests
 - [ ] Re-add "cargo" lints and fix all concerns
 - [ ] CI pipeline on GitHub Actions
 - [ ] Track exit status (`$?`) for last executed command

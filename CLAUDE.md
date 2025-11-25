@@ -4,11 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a CodeCrafters challenge implementation for building a POSIX-compliant shell in Rust. The shell should be capable of:
-- Interpreting shell commands
-- Running external programs
-- Implementing builtin commands (cd, pwd, echo, etc.)
-- Command parsing and REPL functionality
+This is a CodeCrafters challenge implementation for building a POSIX-compliant shell in Rust.
+
+The features implemented in this shell are driven by whatever stage of the CodeCrafters challenge I am on. Feel free to make suggestions, but usually if it does not help pass a stage, I won't implement.
 
 ## Build and Run Commands
 
